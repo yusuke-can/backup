@@ -1,2 +1,2 @@
 # backup
-backup files arrange and dispose java source
+自分用にバックアップ関連のプログラムなどを登録
