@@ -25,11 +25,15 @@ import exception.BkPropertyException;
  */
 public class BasePropsFactory {
 
-  protected interface ProperTypeIf {
+  protected interface PropertyTypeIf {
     String getKey();
 
-    default String getValue(final Map<String, String> propertyMap) {
+    default String get(final Map<String, String> propertyMap) {
       return (propertyMap == null) ? null : propertyMap.get(getKey());
+    };
+
+    default String getOrDefault(final Map<String, String> propertyMap, final String defaultValue) {
+      return (propertyMap == null) ? defaultValue : propertyMap.getOrDefault(getKey(), defaultValue);
     };
   }
 
@@ -73,30 +77,30 @@ public class BasePropsFactory {
   }
 
   protected static String validateAndGetDirPath(
-      final ProperTypeIf propertyType,
+      final PropertyTypeIf propertyType,
       final Map<String, String> propertyMap,
       final String propertyFilePath) {
     final File file = validateAndGetFile(propertyType, propertyMap, propertyFilePath);
     if (!file.isDirectory()) {
-      throw new BkPropertyException("not directory.", propertyType.getKey(), propertyType.getValue(propertyMap), propertyFilePath);
+      throw new BkPropertyException("not directory.", propertyType.getKey(), propertyType.get(propertyMap), propertyFilePath);
     }
-    return propertyType.getValue(propertyMap);
+    return propertyType.get(propertyMap);
   }
 
   protected static String validateAndGetFilePath(
-      final ProperTypeIf propertyType,
+      final PropertyTypeIf propertyType,
       final Map<String, String> propertyMap,
       final String propertyFilePath) {
     validateAndGetFile(propertyType, propertyMap, propertyFilePath);
-    return propertyType.getValue(propertyMap);
+    return propertyType.get(propertyMap);
   }
 
   protected static File validateAndGetFile(
-      final ProperTypeIf propertyType,
+      final PropertyTypeIf propertyType,
       final Map<String, String> propertyMap,
       final String propertyFilePath) {
 
-    final String filePath = propertyType.getValue(propertyMap);
+    final String filePath = propertyType.get(propertyMap);
     if (Strings.isNullOrEmpty(filePath)) {
       throw new BkPropertyException(propertyType.getKey(), filePath, propertyFilePath);
     }
@@ -108,11 +112,11 @@ public class BasePropsFactory {
   }
 
   protected static <E extends ExtentionTypeIf> E validateAndGetExtensionType(
-      final ProperTypeIf propertyType,
+      final PropertyTypeIf propertyType,
       final Map<String, String> propertyMap,
       final Set<E> validExtensionTyps,
       final String propertyFilePath) {
-    final String extension = propertyType.getValue(propertyMap);
+    final String extension = propertyType.get(propertyMap);
     if (Strings.isNullOrEmpty(extension)) {
       throw new BkPropertyException(propertyType.getKey(), extension, propertyFilePath);
     }

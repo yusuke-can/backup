@@ -25,7 +25,7 @@ public class BbOldFilesArrangeProps {
   private String oldBackupDirPath;
   private String logDirPath;
   private String aggregateDirPath;
-  private Boolean delDuplicateFile;
+  private Boolean delDuplicateFile; 
   private List<String> delFileNames;
   private Boolean delCompressSourceDir;
   private CompressExtentsionType compressExtensionType;

@@ -42,7 +42,7 @@ public class EnumUtils {
       final BiPredicate<T, E> predicateEnumType,
       final E defaultEnumType) {
     return Optional.ofNullable(t)
-        .flatMap(tOpt -> EnumSet.allOf(clazz).stream().filter(en -> predicateEnumType.test(t, en)).findFirst())
+        .flatMap(tv -> EnumSet.allOf(clazz).stream().filter(en -> predicateEnumType.test(tv, en)).findFirst())
         .orElse(defaultEnumType);
   }
 

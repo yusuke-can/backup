@@ -1,7 +1,7 @@
 package enums;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
 
 //import static org.hamcrest.MatcherAssert.*;
 //import static org.hamcrest.Matchers.*;
@@ -43,7 +43,7 @@ public class CompressExtentsionTypeTest {
 
   @Test
   public void test_get() {
-    assertThat(CompressExtentsionType.ZIP.get(), is("zip"));
+    assertThat(CompressExtentsionType.ZIP.toLower(), is("zip"));
   }
 
   @Test

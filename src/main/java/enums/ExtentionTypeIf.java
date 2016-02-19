@@ -15,10 +15,10 @@ public interface ExtentionTypeIf {
   }
 
   default boolean equalsIgnoreCase(final String enumStr) {
-    return Strings.isNullOrEmpty(enumStr) ? false : equals(enumStr.toUpperCase());
+    return Strings.isNullOrEmpty(enumStr) ? false : this.equals(enumStr.toUpperCase());
   }
 
-  default String get() {
+  default String toLower() {
     return this.toString().toLowerCase();
   }
 

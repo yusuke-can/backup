@@ -1,7 +1,11 @@
 package utils;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+
+import java.util.EnumSet;
+import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -49,6 +53,12 @@ public class EnumUtilsTest {
     STAFF("00001"),
     NONE("00000"), ;
     private String code;
+
+    public static AuthorityCodeType getType(final String code) {
+      return Optional.ofNullable(code).flatMap(
+          cd -> EnumSet.allOf(AuthorityCodeType.class).stream().filter(en -> en.getCode().equals(cd)).findFirst())
+          .orElse(NONE);
+    }
   }
 
   @Before
@@ -75,16 +85,16 @@ public class EnumUtilsTest {
 
   @Test
   public void test_getEnumType() {
-    assertThat(EnumUtils.getEnumType(null, GenderCodeType.class, (code, en) -> en.getCode().equals(code)), nullValue());
-    assertThat(EnumUtils.getEnumType(1, GenderCodeType.class, (code, en) -> en.getCode().equals(code)), is(GenderCodeType.MALE));
-    assertThat(EnumUtils.getEnumType(-1, GenderCodeType.class, (code, en) -> en.getCode().equals(code)), nullValue());
+    assertThat(EnumUtils.getEnumType(null, GenderCodeType.class, (cd, en) -> en.getCode().equals(cd)), nullValue());
+    assertThat(EnumUtils.getEnumType(1, GenderCodeType.class, (cd, en) -> en.getCode().equals(cd)), is(GenderCodeType.MALE));
+    assertThat(EnumUtils.getEnumType(-1, GenderCodeType.class, (cd, en) -> en.getCode().equals(cd)), nullValue());
   }
 
   @Test
   public void getEnumTypeOrDefault() {
-    assertThat(EnumUtils.getEnumTypeOrDefault(null, GenderCodeType.class, (code, en) -> en.getCode().equals(code), GenderCodeType.UNKNOWN), is(GenderCodeType.UNKNOWN));
-    assertThat(EnumUtils.getEnumTypeOrDefault(1, GenderCodeType.class, (code, en) -> en.getCode().equals(code), GenderCodeType.UNKNOWN), is(GenderCodeType.MALE));
-    assertThat(EnumUtils.getEnumTypeOrDefault(-1, GenderCodeType.class, (code, en) -> en.getCode().equals(code), GenderCodeType.UNKNOWN), is(GenderCodeType.UNKNOWN));
+    assertThat(EnumUtils.getEnumTypeOrDefault(null, GenderCodeType.class, (cd, en) -> en.getCode().equals(cd), GenderCodeType.UNKNOWN), is(GenderCodeType.UNKNOWN));
+    assertThat(EnumUtils.getEnumTypeOrDefault(1, GenderCodeType.class, (cd, en) -> en.getCode().equals(cd), GenderCodeType.UNKNOWN), is(GenderCodeType.MALE));
+    assertThat(EnumUtils.getEnumTypeOrDefault(-1, GenderCodeType.class, (cd, en) -> en.getCode().equals(cd), GenderCodeType.UNKNOWN), is(GenderCodeType.UNKNOWN));
   }
 
 }

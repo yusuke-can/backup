@@ -24,7 +24,7 @@ public class BbOldFilesArrangePropsFactory extends BasePropsFactory {
 
   @Getter
   @AllArgsConstructor
-  protected enum PropertyType implements ProperTypeIf {
+  protected enum PropertyType implements PropertyTypeIf {
     LATEST_BACKUP_DIR_PATH("latest.backup.dir.path"),
     OLD_BACKUP_DIR_PATH("old.backup.dir.path"),
     AGGREGATE_DIR_PATH("aggregate.dir.path"),
@@ -58,13 +58,13 @@ public class BbOldFilesArrangePropsFactory extends BasePropsFactory {
     props.setOldBackupDirPath(validateAndGetDirPath(OLD_BACKUP_DIR_PATH, propertyMap, propertyFilePath));
     props.setLogDirPath(validateAndGetDirPath(LOG_DIR_PATH, propertyMap, propertyFilePath));
     props.setAggregateDirPath(validateAndGetDirPath(AGGREGATE_DIR_PATH, propertyMap, propertyFilePath));
-    props.setDelDuplicateFile(Boolean.valueOf(DEL_DUPLICATE_FILE.getValue(propertyMap)));
-    props.setDelCompressSourceDir(Boolean.valueOf(DEL_COMPRESS_SOURCE_DIR.getValue(propertyMap)));
-    props.setDelFileNames(toStringList(DEL_FILE_NAMES.getValue(propertyMap)));
+    props.setDelDuplicateFile(Boolean.valueOf(DEL_DUPLICATE_FILE.get(propertyMap)));
+    props.setDelCompressSourceDir(Boolean.valueOf(DEL_COMPRESS_SOURCE_DIR.get(propertyMap)));
+    props.setDelFileNames(toStringList(DEL_FILE_NAMES.get(propertyMap)));
     final CompressExtentsionType compressExtensionType = validateAndGetExtensionType(
         COMPRESS_FILE_EXTENSION, propertyMap, ENABLE_COMPRESS_EXTENSION_TYPS, propertyFilePath);
     props.setCompressExtensionType(compressExtensionType);
-    props.setExcludeCompressExtensions(toStringList(EXCLUDE_COMPRESS_EXTENSIONS.getValue(propertyMap)));
+    props.setExcludeCompressExtensions(toStringList(EXCLUDE_COMPRESS_EXTENSIONS.get(propertyMap)));
     return props;
   }
 

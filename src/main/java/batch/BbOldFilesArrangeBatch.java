@@ -16,7 +16,6 @@ public class BbOldFilesArrangeBatch {
    * @param args
    */
   public static void main(String[] args) {
-    // TODO 引数のプロパティファイル読み込み
     if(args.length != 1) {
       throw new IllegalArgumentException("invalid arguments. required argument:propertyFilePath. args:"+ args);
     }
