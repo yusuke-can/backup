@@ -5,7 +5,7 @@ package enums;
  *
  * 2016/02/14
  */
-public enum NnddExtentsionType implements ExtentionTypeIf {
+public enum NnddExtensionType implements ExtensionTypeIf {
   BACK,
   XML,
   HTML,

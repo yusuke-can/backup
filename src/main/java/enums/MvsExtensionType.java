@@ -5,7 +5,7 @@ package enums;
  *
  * 2016/02/14
  */
-public enum MvsExtentsionType implements ExtentionTypeIf {
+public enum MvsExtensionType implements ExtensionTypeIf {
   MP4,
   RAR,
   PART,

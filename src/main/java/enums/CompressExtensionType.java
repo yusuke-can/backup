@@ -5,7 +5,7 @@ package enums;
  *
  * 2016/02/14
  */
-public enum CompressExtentsionType implements ExtentionTypeIf {
+public enum CompressExtensionType implements ExtensionTypeIf {
   ZIP,
   GZIP,
   RAR,

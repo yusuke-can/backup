@@ -1,5 +1,6 @@
 package exception;
 
+
 /**
  * @author Y.Kyan
  *
@@ -44,6 +45,6 @@ public class BkPropertyException extends RuntimeException {
   }
 
   protected static String createCommonMessage(final Object key, final Object value, final String filePath) {
-    return String.format("propertyKey:%s, prpertyValue:%s, filePath:%s", key, value, filePath);
+    return String.format("key:%s, value:%s, filePath:%s", key, value, filePath);
   }
 }

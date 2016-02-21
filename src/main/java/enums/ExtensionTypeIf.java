@@ -7,7 +7,7 @@ import com.google.common.base.Strings;
  *
  * 2016/02/14
  */
-public interface ExtentionTypeIf {
+public interface ExtensionTypeIf {
 
   default boolean equals(final String enumStr) {
     final boolean isStartCharDot = Strings.isNullOrEmpty(enumStr) ? false : enumStr.substring(0, 1).equals(".");
@@ -20,6 +20,10 @@ public interface ExtentionTypeIf {
 
   default String toLower() {
     return this.toString().toLowerCase();
+  }
+
+  default String toLowerWithDot() {
+    return "." + this.toString().toLowerCase();
   }
 
   default boolean equalsFromFile(final String filePath) {

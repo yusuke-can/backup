@@ -9,7 +9,7 @@ import java.util.function.BiPredicate;
  *
  * 2016/02/14
  */
-public class EnumUtils {
+public class BkEnumUtils {
 
   /*
    * functional Interfaceの実装がわからなくなった時用に残す
