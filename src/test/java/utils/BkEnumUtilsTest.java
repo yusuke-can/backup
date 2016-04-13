@@ -3,11 +3,25 @@ package utils;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 //import static org.hamcrest.MatcherAssert.*;
 //import static org.hamcrest.Matchers.*;
@@ -21,6 +35,7 @@ import util.BkEnumUtils;
  *
  * 2016/02/11
  */
+@Slf4j
 public class BkEnumUtilsTest {
 
   private enum TestEnumType {
@@ -65,8 +80,98 @@ public class BkEnumUtilsTest {
   public void before() {
   }
 
+  protected enum FinalResultType {
+    STAY,
+    EXCLUDE
+  }
+
+  protected enum ResultType {
+    STAY,
+    EXCLUDE,
+    UNCONFIRMED
+  }
+
+  protected <T,V> Map<FinalResultType,List<V>> createFinalResltMap(
+      final List<T> list,
+      final Predicate<T> predicate,
+      final Function<T,V> valueConverter
+      ) {
+    final Map<FinalResultType,List<V>> map = new EnumMap<>(FinalResultType.class);
+    final Function<T, FinalResultType> keyTypeConverter
+       = (t) -> predicate.test(t) ? FinalResultType.STAY : FinalResultType.EXCLUDE;
+    list.stream().forEach(t -> map.get(keyTypeConverter.apply(t)).add(valueConverter.apply(t)));
+    return map;
+  }
+
+  protected interface FinalResultAccumuratorIf<S> {
+    List<S> getStayListAndIncrementExCounter();
+  }
+
+
+  public static class CalcResultAcc implements FinalResultAccumuratorIf<Double> {
+    private FinalResult<Double, String> result = new FinalResult<Double, String>();
+    private Predicate<Integer> predicate;
+    private Function<Double, Double> stayConverter;
+    private Function<Double, String> excludeConverter;
+
+    public CalcResultAcc() {
+      this.result = new FinalResult<Double, String>();
+      this.predicate = i -> i % 2 == 0;
+      this.stayConverter = d -> d;
+      this.excludeConverter = d -> {
+        final BigDecimal bd = new BigDecimal(d).setScale(3, RoundingMode.HALF_UP);
+        return String.format("%s", bd.doubleValue());
+      };
+    }
+
+    public boolean accumulate(final Integer t, final Double v) {
+      final boolean isStay = predicate.test(t);
+      if (isStay) {
+        this.result.getStayList().add(stayConverter.apply(v));
+      } else {
+        this.result.getExcludeList().add(excludeConverter.apply(v));
+      }
+      return isStay;
+    }
+
+    @Override
+    public List<Double> getStayListAndIncrementExCounter() {
+      return result.getStayList();
+    }
+  }
+
+  @Value
+  protected static class FinalResult<S,E> {
+    private List<S> stayList = new ArrayList<>();
+    private List<E> excludeList = new ArrayList<>();
+  }
+
+//  protected static class DivideFinalResult<> {
+//
+//  }
+
+
+  @Test
+  public void testStream1() {
+
+    final String results = IntStream.iterate(100, i -> i + 10)
+    .limit(100)
+    .mapToObj(Double::valueOf)
+    .flatMap(d -> Stream.of(d, d/2,d/3))
+    .map(d -> new BigDecimal(d).setScale(3, RoundingMode.HALF_UP))
+    .sorted(Comparator.reverseOrder())
+    .map(bd -> String.format("%s", bd.doubleValue()))
+    .collect(Collectors.joining(","));
+
+    log.info("devide and set scale 3 round half up reverse orderd: {}", results);
+  }
+
   @Test
   public void test_getType() {
+
+
+
+
     assertThat(BkEnumUtils.getType(null, TestEnumType.class), nullValue());
     assertThat(BkEnumUtils.getType("", TestEnumType.class), nullValue());
     assertThat(BkEnumUtils.getType("UPPER_UNDERSCORE", TestEnumType.class), is(TestEnumType.UPPER_UNDERSCORE));
